@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 function CreatePost({ onClose, onPostCreated }) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [image, setImage] = useState(''); // New state for image URL
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -12,12 +14,14 @@ function CreatePost({ onClose, onPostCreated }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ title, content }),
+                body: JSON.stringify({ title, content, image }), // Include image URL in the request
             });
             
             if (response.ok) {
                 onPostCreated();
                 onClose();
+            } else {
+                console.error('Failed to create post:', await response.json());
             }
         } catch (error) {
             console.error('Error creating post:', error);
@@ -25,7 +29,7 @@ function CreatePost({ onClose, onPostCreated }) {
     };
 
     return (
-        <div className="modal d-block" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
+        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -54,6 +58,16 @@ function CreatePost({ onClose, onPostCreated }) {
                                     required
                                 ></textarea>
                             </div>
+                            <div className="mb-3">
+                                <label className="form-label">Image URL</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={image}
+                                    onChange={(e) => setImage(e.target.value)} // Capture image URL
+                                    required
+                                />
+                            </div>
                             <button type="submit" className="btn btn-primary">Create Post</button>
                         </form>
                     </div>
@@ -62,5 +76,11 @@ function CreatePost({ onClose, onPostCreated }) {
         </div>
     );
 }
+
+// Define prop types
+CreatePost.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    onPostCreated: PropTypes.func.isRequired
+};
 
 export default CreatePost;

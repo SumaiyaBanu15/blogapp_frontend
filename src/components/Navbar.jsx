@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function Navbar({ onNewPost }) {
     return (
@@ -15,5 +16,10 @@ function Navbar({ onNewPost }) {
         </nav>
     );
 }
+
+// Define prop types
+Navbar.propTypes = {
+    onNewPost: PropTypes.func.isRequired
+};
 
 export default Navbar;
