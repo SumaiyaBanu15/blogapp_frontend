@@ -18,6 +18,7 @@ function CreatePost({ onClose, onPostCreated }) {
             });
             
             if (response.ok) {
+                alert('Blog Created Successfully');  // Show alert
                 onPostCreated();
                 onClose();
             } else {
